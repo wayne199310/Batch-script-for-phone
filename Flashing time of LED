@@ -1,0 +1,41 @@
+@echo off
+cd AP
+
+SET maxvalue=8
+SET minvalue=3 
+SET /A tmp=((%RANDOM%)%%(%maxvalue%))+(%minvalue%)
+
+
+set count=0
+:loop
+set /a count=%count%+1
+adb shell /data/data/LedTest 2
+adb shell /data/data/LedTest 0
+
+
+if "%count%" LSS "%tmp%" goto loop
+
+
+set /p input= input the number
+if "%input%" EQU "%tmp%" goto PASS
+if "%input%" NEQ "%tmp%" goto FAIL
+
+
+:PASS
+echo PASS
+goto END
+
+:FAIL
+echo FAIL
+goto END
+
+:END
+pause
+
+
+
+
+
+
+
+
