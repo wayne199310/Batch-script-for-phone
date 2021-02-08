@@ -1,0 +1,35 @@
+@echo off
+
+
+FOR /F "tokens=* USEBACKQ" %%a IN (`adb shell proximity_calibration_data 5`) DO (
+SET aa=%%a
+)
+ECHO %aa%
+
+FOR /F "tokens=* USEBACKQ" %%b IN (`adb shell proximity_get_proxm`) DO (
+SET bb=%%b
+)
+ECHO %bb%
+
+set /a result=%aa%-%bb%
+echo %result%
+
+if %result% LSS 0 GOTO NEG
+if %result% GEQ 0 GOTO POS
+
+:NEG
+if %result% GTR -200 GOTO PASS
+if %result% LSS -200 GOTO FAIL
+:POS
+if %result% LSS 200 GOTO PASS
+if %result% GTR 200 GOTO FAIL
+
+:FAIL
+echo FAIL
+goto END
+
+:PASS
+echo PASS
+
+:END
+pause
